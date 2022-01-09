@@ -14,8 +14,10 @@ public class UserService {
     static {
         Account account1 = new Account(new BigDecimal("100.00"));
         User user1 = new User("user1", "1234", account1);
+
         Account account2 = new Account(new BigDecimal("5050.58"));
         User user2 = new User("user2", "1111", account2);
+
         Account account3 = new Account(new BigDecimal("7.12"));
         User user3 = new User("user3", "5555", account3);
 
@@ -48,7 +50,16 @@ public class UserService {
 
     public User createUser(String userId, String pin, String balance){
         Account account = new Account(new BigDecimal(balance));
+//        long randomId = new Random().nextLong();
+//        account.setId(Math.abs(randomId));
         User user = new User(userId, pin, account);
+        users.add(user);
+        return user;
+    }
+
+    public User createUser(User user){
+//        long randomId = new Random().nextLong();
+//        user.setId(Math.abs(randomId));
         users.add(user);
         return user;
     }
