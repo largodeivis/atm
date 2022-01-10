@@ -1,7 +1,5 @@
 package com.atm.atm.controller;
 
-import com.atm.atm.exception.InsufficientStartingBalanceException;
-import com.atm.atm.model.Account;
 import com.atm.atm.model.User;
 import com.atm.atm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
