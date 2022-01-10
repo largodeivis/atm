@@ -23,7 +23,7 @@ public class UserControllerIT {
     @LocalServerPort
     private int port;
 
-    String url = "http://localhost:" + port;
+    String url = "http://localhost:";
 
     TestRestTemplate restTemplate = new TestRestTemplate();
 
@@ -36,7 +36,7 @@ public class UserControllerIT {
 
     @Test
     public void testRetrieveUser() throws JSONException {
-        String retrieveUserUrl = url + "/users/2";
+        String retrieveUserUrl = url + port + "/users/2";
 
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
@@ -50,7 +50,7 @@ public class UserControllerIT {
 
     @Test
     public void testRetrieveAllUsers() throws JSONException {
-         String retrieveAllUsersUrl = url + "/users/";
+         String retrieveAllUsersUrl = url + port + "/users/";
 
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
@@ -64,7 +64,7 @@ public class UserControllerIT {
 
     @Test
     public void testCreateUser() throws JSONException {
-        String createUserUrl = url + "/users/create-user";
+        String createUserUrl = url + port + "/users/create-user";
 
         Account account = new Account(new BigDecimal("777.77"));
         User user = new User("Daphne", "7777", account);
