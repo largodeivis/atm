@@ -18,6 +18,7 @@ public class User {
     private long id;
 
     @NotBlank
+    @Column(unique = true)
     private String userId;
 
     @Size(min=4, message="PIN must be 4 or more digits.")
@@ -46,8 +47,10 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
-                ", balance =" + account.getBalance() +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", pin='" + pin + '\'' +
+                ", account=" + account +
                 '}';
     }
 }

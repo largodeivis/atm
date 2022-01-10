@@ -1,69 +1,60 @@
 package com.atm.atm.service;
 
+import com.atm.atm.jpa.AccountRepository;
+import com.atm.atm.jpa.UserRepository;
 import com.atm.atm.model.Account;
 import com.atm.atm.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private static List<User> users = new ArrayList<>();
-    static {
-        Account account1 = new Account(new BigDecimal("100.00"));
-        User user1 = new User("user1", "1234", account1);
 
-        Account account2 = new Account(new BigDecimal("5050.58"));
-        User user2 = new User("user2", "1111", account2);
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-        Account account3 = new Account(new BigDecimal("7.12"));
-        User user3 = new User("user3", "5555", account3);
+    @Autowired
+    UserRepository userRepository;
 
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
+    @Autowired
+    AccountRepository accountRepository;
+
+    public Iterable<User> retrieveAllUsers() {
+        return userRepository.findAll();
     }
 
-    public List<User> retrieveAllUsers(){
-        return users;
+    public Optional<User> retrieveUser(long userId) {
+        return userRepository.findById(userId);
     }
 
-    public User retrieveUser(long userId){
-        for(User user : users){
-            if(user.getId() == userId){
-                return user;
+    public Optional<Account> retrieveAccount(long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        return Optional.of(user.get().getAccount());
+    }
+
+    public User createUser(User user) {
+        try {
+            accountRepository.save(user.getAccount());
+        } catch (Exception ex){
+            if(user.getAccount().getBalance().compareTo(BigDecimal.ZERO) < 0){
+                logger.error("Starting balance should be 0 or more.");
             }
+            return null;
         }
-        return null;
-    }
-
-    public Account retrieveAccount(long userId){
-        for(User user : users){
-            if(user.getId() == userId){
-                return user.getAccount();
+        try {
+            return userRepository.save(user);
+        } catch (Exception ex){
+            if (user.getPin().length() < 4 || user.getPin().matches("^\\d+$")){
+                logger.error("Pin should be greater than 4 digits and must be numeric");
+            } else if (user.getUserId().isBlank()){
+                logger.error("User ID can't be empty");
             }
+            return null;
         }
-        return null;
     }
-
-    public User createUser(String userId, String pin, String balance){
-        Account account = new Account(new BigDecimal(balance));
-//        long randomId = new Random().nextLong();
-//        account.setId(Math.abs(randomId));
-        User user = new User(userId, pin, account);
-        users.add(user);
-        return user;
-    }
-
-    public User createUser(User user){
-//        long randomId = new Random().nextLong();
-//        user.setId(Math.abs(randomId));
-        users.add(user);
-        return user;
-    }
-
-
-
 }

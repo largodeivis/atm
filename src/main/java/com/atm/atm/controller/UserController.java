@@ -1,5 +1,6 @@
 package com.atm.atm.controller;
 
+import com.atm.atm.exception.InsufficientStartingBalanceException;
 import com.atm.atm.model.Account;
 import com.atm.atm.model.User;
 import com.atm.atm.service.UserService;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -17,26 +18,21 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @GetMapping("users/{userId}/account")
-    public Account retrieveAccount(@PathVariable Long userId){
-        return service.retrieveAccount(userId);
-    }
-
     @GetMapping("users/{userId}")
-    public User retrieveUser(@PathVariable Long userId){
+    public Optional<User> retrieveUser(@PathVariable Long userId){
         return service.retrieveUser(userId);
     }
 
     @GetMapping("users/")
-    public List<User> retrieveUsers(){
+    public Iterable<User> retrieveUsers(){
         return service.retrieveAllUsers();
     }
 
     @PostMapping("users/create-user")
-    public ResponseEntity<Void> createUser(@RequestBody User newUser){
+    public ResponseEntity<Void> createUser(@RequestBody User newUser) {
         User user = service.createUser(newUser);
         if(user == null){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.badRequest().build();
         }
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
