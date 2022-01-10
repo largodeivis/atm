@@ -1,5 +1,6 @@
 package com.atm.atm.service;
 
+import com.atm.atm.exception.InvalidCredentialsException;
 import com.atm.atm.jpa.AccountRepository;
 import com.atm.atm.jpa.UserRepository;
 import com.atm.atm.model.Account;
@@ -31,10 +32,16 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Optional<Account> retrieveAccount(long userId) {
-        Optional<User> user = userRepository.findById(userId);
+    public Optional<Account> retrieveAccount(long userId, String pin) throws InvalidCredentialsException {
+        if (verifyCredentials(userId, pin)) {
+            Optional<User> user = userRepository.findById(userId);
 
-        return Optional.of(user.get().getAccount());
+            if (user.isEmpty()) {
+                throw new InvalidCredentialsException(userId);
+            }
+            return Optional.of(user.get().getAccount());
+        }
+        throw new InvalidCredentialsException(userId);
     }
 
     public User createUser(User user) {
@@ -56,5 +63,17 @@ public class UserService {
             }
             return null;
         }
+    }
+
+    public Boolean verifyCredentials(Long userId, String pin) throws InvalidCredentialsException {
+        boolean valid = false;
+        Optional<User> user = retrieveUser(userId);
+        if (user.isEmpty()){
+            throw new InvalidCredentialsException(userId);
+        }
+        if (user.get().getPin().equals(pin)){
+            valid = true;
+        }
+        return valid;
     }
 }

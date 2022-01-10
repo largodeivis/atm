@@ -31,7 +31,7 @@ public class AccountControllerIT {
 
     @Test
     public void testRetrieveAccount() throws JSONException {
-        String retrieveAccountUrl = url + port + "/users/2/account";
+        String retrieveAccountUrl = url + port + "/users/2/1234/account";
 
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
