@@ -7,12 +7,12 @@ public class InsufficientBalanceException extends Exception{
         super(message);
     }
     public InsufficientBalanceException(BigDecimal balance, BigDecimal amount){
-        super("There are insufficient funds to withdraw the desired amount. " +
-                "Current Balance: $" + balance.toString() + " Withdraw Amount: $" + amount.toString());
+        super("There are insufficient funds to withdraw the desired amount." +
+                "\nCurrent Balance: $" + balance.toString() + "\nWithdraw Amount: $" + amount.toString());
     }
 
     public InsufficientBalanceException(BigDecimal balance, String amount){
-        super("There are insufficient funds to withdraw the desired amount. " +
-                "Current Balance: $" + balance.toString() + " Withdraw Amount: $" + amount);
+        super("There are insufficient funds to withdraw the desired amount." +
+                "\nCurrent Balance: $" + balance.toString() + "\nWithdraw Amount: $" + amount);
     }
 }

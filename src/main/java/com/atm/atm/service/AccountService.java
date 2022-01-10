@@ -1,6 +1,8 @@
 package com.atm.atm.service;
 
 import com.atm.atm.controller.AccountController;
+import com.atm.atm.exception.InsufficientBalanceException;
+import com.atm.atm.exception.InvalidAmountException;
 import com.atm.atm.exception.InvalidCredentialsException;
 import com.atm.atm.jpa.AccountRepository;
 import com.atm.atm.model.Account;
@@ -33,41 +35,46 @@ public class AccountService {
         throw new InvalidCredentialsException(userId);
     }
 
-    public Optional<Account> depositMoney(Long userId, String pin, BigDecimal amount) throws InvalidCredentialsException {
-        if (amount.compareTo(BigDecimal.ZERO) < 0){
-            logger.error("Amount to deposit was negative. Amount: " + amount);
-            return Optional.empty();
-        }
-
+    public String depositMoney(Long userId, String pin, BigDecimal amount) throws InvalidCredentialsException, InvalidAmountException {
         Optional<Account> account = userService.retrieveAccount(userId, pin);
         if (account.isEmpty()){
+            logger.error("Invalid credentials provided while attempting to deposit money.");
             throw new InvalidCredentialsException(userId);
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) < 0){
+            logger.error("Amount to deposit was negative. Amount: " + amount);
+            throw new InvalidAmountException(userId, amount);
         }
 
         BigDecimal newAmount = retrieveBalance(userId, pin).add(amount);
         account.get().setBalance(newAmount);
-        Account account1 = accountRepository.save(account.get());
-        return Optional.of(account1);
+        accountRepository.save(account.get());
+        return "UserId: " + userId +"\nNew Balance: $" + newAmount;
     }
 
-    public Optional<Account> withdrawMoney(long userId, String pin, BigDecimal amount) throws InvalidCredentialsException {
-        if (amount.compareTo(BigDecimal.ZERO) < 0){
-            logger.error("Amount to withdraw was negative. Amount: " + amount);
-            return Optional.empty();
-        }
+    public String withdrawMoney(long userId, String pin, BigDecimal amount) throws InvalidCredentialsException,
+            InvalidAmountException, InsufficientBalanceException {
         Optional<Account> account = userService.retrieveAccount(userId,pin);
         if (account.isEmpty()){
+            logger.error("Invalid credentials provided while attempting to withdraw money.");
             throw new InvalidCredentialsException(userId);
         }
+
+        if (amount.compareTo(BigDecimal.ZERO) < 0){
+            logger.error("Amount to withdraw was negative. Amount: " + amount);
+            throw new InvalidAmountException(userId, amount);
+        }
+
         BigDecimal currentBalance = retrieveBalance(userId, pin);
         BigDecimal newAmount = currentBalance.subtract(amount);
         if (newAmount.compareTo(BigDecimal.ZERO) < 0){
             logger.error("Cannot withdraw more than your current balance. Current Balance: " + currentBalance + ". Withdraw amount: " + amount);
-            return Optional.empty();
+            throw new InsufficientBalanceException(currentBalance, amount);
         }
         Account account1 = account.get();
         account1.setBalance(newAmount);
         accountRepository.save(account1);
-        return Optional.of(account1);
+        return "UserId: " + userId +"\nNew Balance: $" + newAmount;
     }
 }

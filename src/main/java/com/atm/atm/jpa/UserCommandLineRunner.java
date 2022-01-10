@@ -24,13 +24,10 @@ public class UserCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Account account1 = accountRepository.save(new Account(new BigDecimal("100.00")));
-        User user1 = userRepository.save(new User("Shaggy", "1234", account1));
+        userRepository.save(new User(123456789, "Shaggy", "1234", account1));
 
         Account account2 = accountRepository.save(new Account(new BigDecimal("5050.58")));
-        User user2 = userRepository.save(new User("Scooby", "1111", account2));
-
-        Account account3 = accountRepository.save(new Account(new BigDecimal("7.12")));
-        User user3 = userRepository.save(new User("Scrappy", "5555", account3));
+        userRepository.save(new User(987654321,"Scooby", "1111", account2));
 
         for (User user : userRepository.findAll()){
             log.info(user.toString());

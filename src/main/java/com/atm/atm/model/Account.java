@@ -29,6 +29,10 @@ public class Account {
         this.balance = balance.setScale(2, RoundingMode.HALF_UP);
     }
 
+    public Account(String balance) {
+        this.balance = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
+    }
+
     public Account(long id, BigDecimal balance) {
         this.id = id;
         this.balance = balance.setScale(2, RoundingMode.HALF_UP);
