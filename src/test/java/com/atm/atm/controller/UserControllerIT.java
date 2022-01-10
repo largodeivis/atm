@@ -36,13 +36,13 @@ public class UserControllerIT {
 
     @Test
     public void testRetrieveUser() throws JSONException {
-        String retrieveUserUrl = url + port + "/users/2";
+        String retrieveUserUrl = url + port + "/users/123456789";
 
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(retrieveUserUrl, HttpMethod.GET, entity, String.class);
 
-        String expected = "{id:2,userId:Shaggy,pin:'1234',account:{id:1,balance:100.00}}";
+        String expected = "{id:123456789,userId:Shaggy,pin:'1234',account:{id:1,balance:100.00}}";
 
         JSONAssert.assertEquals(expected, response.getBody(), false);
 
@@ -56,7 +56,7 @@ public class UserControllerIT {
 
         ResponseEntity<String> response = restTemplate.exchange(retrieveAllUsersUrl, HttpMethod.GET, entity, String.class);
 
-        String expected = "[{id:2,userId:Shaggy,pin:'1234',account:{id:1,balance:100.00}},{id:4,userId:Scooby,pin:'1111',account:{id:3,balance:5050.58}},{id:6,userId:Scrappy,pin:'5555',account:{id:5,balance:7.12}}]";
+        String expected = "[{id:123456789,userId:Shaggy,pin:'1234',account:{id:1,balance:100.00}},{id:987654321,userId:Scooby,pin:'1111',account:{id:2,balance:5050.58}}]";
 
         JSONAssert.assertEquals(expected, response.getBody(), false);
 
@@ -67,7 +67,7 @@ public class UserControllerIT {
         String createUserUrl = url + port + "/users/create-user";
 
         Account account = new Account(new BigDecimal("777.77"));
-        User user = new User("Daphne", "7777", account);
+        User user = new User(1234, "Daphne", "7777", account);
 
         HttpEntity entity = new HttpEntity<User>(user, headers);
 
