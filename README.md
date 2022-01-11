@@ -28,7 +28,7 @@ User # 2
 * PIN: 1111
 * Starting Balance: $5050.58
 
-##Calling the API
+## Calling the API
 * **Get Account Balance**
 
 _GET_ Request to _/user/account/_ with **userid** and **pin** request parameters.
