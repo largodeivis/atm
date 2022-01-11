@@ -43,7 +43,7 @@ public class AccountService {
         }
 
         if (amount.compareTo(BigDecimal.ZERO) < 0){
-            logger.error("Amount to deposit was negative. Amount: " + amount);
+            logger.error("Amount to deposit was negative. Amount: $" + amount);
             throw new InvalidAmountException(userId, amount);
         }
 
@@ -62,14 +62,14 @@ public class AccountService {
         }
 
         if (amount.compareTo(BigDecimal.ZERO) < 0){
-            logger.error("Amount to withdraw was negative. Amount: " + amount);
+            logger.error("Amount to withdraw was negative. Amount: $" + amount);
             throw new InvalidAmountException(userId, amount);
         }
 
         BigDecimal currentBalance = retrieveBalance(userId, pin);
         BigDecimal newAmount = currentBalance.subtract(amount);
         if (newAmount.compareTo(BigDecimal.ZERO) < 0){
-            logger.error("Cannot withdraw more than your current balance. Current Balance: " + currentBalance + ". Withdraw amount: " + amount);
+            logger.error("Cannot withdraw more than your current balance. Current Balance: $" + currentBalance + ". Withdraw amount: $" + amount);
             throw new InsufficientBalanceException(currentBalance, amount);
         }
         Account account1 = account.get();

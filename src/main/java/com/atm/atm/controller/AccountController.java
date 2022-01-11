@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -24,8 +25,14 @@ public class AccountController {
     private UserService userService;
 
     @GetMapping("user/account")
-    public Optional<Account> retrieveAccount(@RequestParam("userid") Long userId, @RequestParam("pin") String pin) throws InvalidCredentialsException {
-        return userService.retrieveAccount(userId, pin);
+    public ResponseEntity<String> retrieveBalance(@RequestParam("userid") Long userId, @RequestParam("pin") String pin){
+        try {
+            BigDecimal balance = accountService.retrieveBalance(userId, pin);
+            return new ResponseEntity<>("User ID: " + userId.toString() + "\nBalance: $" + balance.toString(),
+                    HttpStatus.OK);
+        } catch (InvalidCredentialsException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("account/deposit")
