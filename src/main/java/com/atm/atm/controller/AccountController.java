@@ -34,7 +34,9 @@ public class AccountController {
         try {
             String moneyDeposited = accountService.depositMoney(userId, pin, transaction.getAmount());
             return new ResponseEntity<>(moneyDeposited, HttpStatus.OK);
-        } catch (InvalidCredentialsException | InvalidAmountException ex) {
+        } catch (InvalidCredentialsException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch( InvalidAmountException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -45,6 +47,8 @@ public class AccountController {
         try {
             String moneyWithdrew = accountService.withdrawMoney(userId, pin, transaction.getAmount());
             return new ResponseEntity<>(moneyWithdrew, HttpStatus.OK);
+        } catch (InvalidCredentialsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

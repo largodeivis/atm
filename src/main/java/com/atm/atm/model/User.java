@@ -20,7 +20,7 @@ public class User {
     @Column(unique = true)
     private String userId;
 
-    @Size(min=4, message="PIN must be 4 or more digits.")
+    @Size(min = 4, max=4, message="PIN must be 4 digits.")
     @PositiveOrZero(message="PIN must be numerical.")
     private String pin;
 
