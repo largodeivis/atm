@@ -2,10 +2,8 @@ package com.atm.atm.controller;
 
 import com.atm.atm.exception.InvalidAmountException;
 import com.atm.atm.exception.InvalidCredentialsException;
-import com.atm.atm.model.Account;
 import com.atm.atm.model.AccountTransaction;
 import com.atm.atm.service.AccountService;
-import com.atm.atm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +11,12 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @RestController
 public class AccountController {
 
     @Autowired
     AccountService accountService;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping("user/account")
     public ResponseEntity<String> retrieveBalance(@RequestParam("userid") Long userId, @RequestParam("pin") String pin){
