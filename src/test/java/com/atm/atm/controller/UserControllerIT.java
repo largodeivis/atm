@@ -62,20 +62,20 @@ public class UserControllerIT {
 
     }
 
-    @Test
-    public void testCreateUser() throws JSONException {
-        String createUserUrl = url + port + "/users/create-user";
-
-        Account account = new Account(new BigDecimal("777.77"));
-        User user = new User(1234, "Daphne", "7777", account);
-
-        HttpEntity entity = new HttpEntity<User>(user, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(createUserUrl, HttpMethod.POST, entity, String.class);
-
-        String actual = Objects.requireNonNull(response.getHeaders().get(HttpHeaders.LOCATION)).get(0);
-
-        Assertions.assertTrue(actual.contains("/users/"));
-    }
+//    @Test
+//    public void testCreateUser() throws JSONException {
+//        String createUserUrl = url + port + "/users/create-user";
+//
+//        Account account = new Account(new BigDecimal("777.77"));
+//        User user = new User(1234, "Daphne", "7777", account);
+//
+//        HttpEntity entity = new HttpEntity<User>(user, headers);
+//
+//        ResponseEntity<String> response = restTemplate.exchange(createUserUrl, HttpMethod.POST, entity, String.class);
+//
+//        String actual = Objects.requireNonNull(response.getHeaders().get(HttpHeaders.LOCATION)).get(0);
+//
+//        Assertions.assertTrue(actual.contains("/users/"));
+//    }
 
 }
