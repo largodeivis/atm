@@ -35,7 +35,7 @@ public class AccountController {
                                         @RequestBody AccountTransaction transaction) throws HttpMessageNotReadableException {
         try {
             BigDecimal newBalance = accountService.depositMoney(userId, pin, transaction.getAmount());
-            return new ResponseEntity<>("UserId: " + userId +"\nNew Balance: $" + newBalance.toString(), HttpStatus.OK);
+            return new ResponseEntity<>(responseString(userId, newBalance), HttpStatus.OK);
         } catch (InvalidCredentialsException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch( InvalidAmountException ex) {
@@ -48,7 +48,7 @@ public class AccountController {
             @RequestBody AccountTransaction transaction) throws HttpMessageNotReadableException {
         try {
             BigDecimal newBalance = accountService.withdrawMoney(userId, pin, transaction.getAmount());
-            return new ResponseEntity<>("UserId: " + userId +"\nNew Balance: $" + newBalance, HttpStatus.OK);
+            return new ResponseEntity<>(responseString(userId, newBalance), HttpStatus.OK);
         } catch (InvalidCredentialsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (InvalidAmountException ex){
@@ -56,5 +56,9 @@ public class AccountController {
         } catch (InsufficientBalanceException ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
         }
+    }
+
+    private String responseString(Long userId, BigDecimal balance){
+        return "UserId: " + userId +"\nNew Balance: $" + balance;
     }
 }
