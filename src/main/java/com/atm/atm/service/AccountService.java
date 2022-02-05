@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,8 @@ public class AccountService {
             throw new InvalidAmountException(userId, amount);
         }
 
+        amount = amount.setScale(2);
+
         BigDecimal newAmount = retrieveBalance(userId, pin).add(amount);
         account.get().setBalance(newAmount);
         accountRepository.save(account.get());
@@ -67,6 +70,7 @@ public class AccountService {
         }
 
         BigDecimal currentBalance = retrieveBalance(userId, pin);
+        amount = amount.setScale(2);
         BigDecimal newAmount = currentBalance.subtract(amount);
         if (newAmount.compareTo(BigDecimal.ZERO) < 0){
             logger.error("Cannot withdraw more than your current balance. Current Balance: $" + currentBalance + ". Withdraw amount: $" + amount);

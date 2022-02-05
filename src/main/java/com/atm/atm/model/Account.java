@@ -26,20 +26,29 @@ public class Account {
     };
 
     public Account(BigDecimal balance) {
-        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
+        this.balance = setBalanceScale(balance);
     }
 
     public Account(String balance) {
-        this.balance = new BigDecimal(balance).setScale(2, RoundingMode.HALF_UP);
+        this.balance = setBalanceScale(balance);
     }
 
     public Account(long id, BigDecimal balance) {
         this.id = id;
-        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
+        this.balance = setBalanceScale(balance);
     }
 
     public void setBalance(BigDecimal balance) {
-        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
+        this.balance = setBalanceScale(balance);
+    }
+
+    private BigDecimal setBalanceScale(BigDecimal balance){
+        return balance.setScale(2);
+    }
+
+    private BigDecimal setBalanceScale(String balance){
+        BigDecimal newBalance = new BigDecimal(balance);
+        return newBalance.setScale(2);
     }
 
     @Override
