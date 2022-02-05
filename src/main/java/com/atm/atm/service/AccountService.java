@@ -35,7 +35,7 @@ public class AccountService {
         throw new InvalidCredentialsException(userId);
     }
 
-    public String depositMoney(Long userId, String pin, BigDecimal amount) throws InvalidCredentialsException, InvalidAmountException {
+    public BigDecimal depositMoney(Long userId, String pin, BigDecimal amount) throws InvalidCredentialsException, InvalidAmountException {
         Optional<Account> account = userService.retrieveAccount(userId, pin);
         if (account.isEmpty()){
             logger.error("Invalid credentials provided while attempting to deposit money.");
@@ -50,10 +50,10 @@ public class AccountService {
         BigDecimal newAmount = retrieveBalance(userId, pin).add(amount);
         account.get().setBalance(newAmount);
         accountRepository.save(account.get());
-        return "UserId: " + userId +"\nNew Balance: $" + newAmount;
+        return newAmount;
     }
 
-    public String withdrawMoney(long userId, String pin, BigDecimal amount) throws InvalidCredentialsException,
+    public BigDecimal withdrawMoney(long userId, String pin, BigDecimal amount) throws InvalidCredentialsException,
             InvalidAmountException, InsufficientBalanceException {
         Optional<Account> account = userService.retrieveAccount(userId,pin);
         if (account.isEmpty()){
@@ -75,6 +75,6 @@ public class AccountService {
         Account account1 = account.get();
         account1.setBalance(newAmount);
         accountRepository.save(account1);
-        return "UserId: " + userId +"\nNew Balance: $" + newAmount;
+        return newAmount;
     }
 }

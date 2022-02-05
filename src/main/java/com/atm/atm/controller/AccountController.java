@@ -1,5 +1,6 @@
 package com.atm.atm.controller;
 
+import com.atm.atm.exception.InsufficientBalanceException;
 import com.atm.atm.exception.InvalidAmountException;
 import com.atm.atm.exception.InvalidCredentialsException;
 import com.atm.atm.model.AccountTransaction;
@@ -33,8 +34,8 @@ public class AccountController {
     public ResponseEntity<String> deposit(@RequestParam("userid") Long userId, @RequestParam("pin") String pin,
                                         @RequestBody AccountTransaction transaction) throws HttpMessageNotReadableException {
         try {
-            String moneyDeposited = accountService.depositMoney(userId, pin, transaction.getAmount());
-            return new ResponseEntity<>(moneyDeposited, HttpStatus.OK);
+            BigDecimal newBalance = accountService.depositMoney(userId, pin, transaction.getAmount());
+            return new ResponseEntity<>("UserId: " + userId +"\nNew Balance: $" + newBalance.toString(), HttpStatus.OK);
         } catch (InvalidCredentialsException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch( InvalidAmountException ex) {
@@ -46,12 +47,14 @@ public class AccountController {
     public ResponseEntity<String> withdraw(@RequestParam("userid") Long userId, @RequestParam("pin") String pin,
             @RequestBody AccountTransaction transaction) throws HttpMessageNotReadableException {
         try {
-            String moneyWithdrew = accountService.withdrawMoney(userId, pin, transaction.getAmount());
-            return new ResponseEntity<>(moneyWithdrew, HttpStatus.OK);
+            BigDecimal newBalance = accountService.withdrawMoney(userId, pin, transaction.getAmount());
+            return new ResponseEntity<>("UserId: " + userId +"\nNew Balance: $" + newBalance, HttpStatus.OK);
         } catch (InvalidCredentialsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
-        } catch (Exception ex){
+        } catch (InvalidAmountException ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InsufficientBalanceException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
         }
     }
 }
