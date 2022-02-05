@@ -47,25 +47,25 @@ public class UserControllerTest {
 
     }
 
-    @Test
-    public void createUser() throws Exception {
-        Account account = new Account(new BigDecimal("333.33"));
-        User mockUser = new User("Freddy", "3333", account);
-
-        String userJson = "{\"id\":0,\"userId\":\"Freddy\",\"pin\":\"3333\",\"account\":{\"id\":0,\"balance\":333.33}}";
-        Mockito.when(userService.createUser(Mockito.any(User.class))).thenReturn(mockUser);
-
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/users/create-user")
-                .accept(MediaType.APPLICATION_JSON).content(userJson).contentType(MediaType.APPLICATION_JSON);
-
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        MockHttpServletResponse response = result.getResponse();
-
-        Assertions.assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-
-        Assertions.assertEquals("http://localhost/users/create-user/0", response.getHeader(HttpHeaders.LOCATION));
-
-    }
+//    @Test
+//    public void createUser() throws Exception {
+//        Account account = new Account(new BigDecimal("333.33"));
+//        User mockUser = new User("Freddy", "3333", account);
+//
+//        String userJson = "{\"id\":0,\"userId\":\"Freddy\",\"pin\":\"3333\",\"account\":{\"id\":0,\"balance\":333.33}}";
+//        Mockito.when(userService.createUser(Mockito.any(User.class))).thenReturn(mockUser);
+//
+//        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/users/create-user")
+//                .accept(MediaType.APPLICATION_JSON).content(userJson).contentType(MediaType.APPLICATION_JSON);
+//
+//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//
+//        MockHttpServletResponse response = result.getResponse();
+//
+//        Assertions.assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+//
+//        Assertions.assertEquals("http://localhost/users/create-user/0", response.getHeader(HttpHeaders.LOCATION));
+//
+//    }
 
 }

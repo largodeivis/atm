@@ -5,6 +5,7 @@ import com.atm.atm.jpa.AccountRepository;
 import com.atm.atm.jpa.UserRepository;
 import com.atm.atm.model.Account;
 import com.atm.atm.model.User;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
