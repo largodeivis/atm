@@ -6,16 +6,17 @@ import com.atm.atm.exception.InvalidAmountException;
 import com.atm.atm.exception.InvalidCredentialsException;
 import com.atm.atm.jpa.AccountRepository;
 import com.atm.atm.model.Account;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
